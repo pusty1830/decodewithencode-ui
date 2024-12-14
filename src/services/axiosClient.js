@@ -24,11 +24,12 @@ export async function logout() {
 export function setCurrentAccessToken(accessToken) {
   return localStorage.setItem("accessToken", accessToken);
 }
+
 export function getUserName() {
   let token = localStorage.getItem("accessToken");
   if (token) {
     let decoded = jwtDecode(token);
-    // console.log("user Details bro!=",decoded)
+    console.log("user Details bro!=", decoded);
     return decoded.name || "";
   } else {
     return "";

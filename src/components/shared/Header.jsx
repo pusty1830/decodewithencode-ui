@@ -2,23 +2,25 @@ import {
   AppBar,
   Button,
   Grid,
+  Box,
   InputAdornment,
   TextField,
   Toolbar,
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import color from "../utils/Colors";
-// import { isLoggedIn } from "../../services/axiosClient";
+
 import { IconButton } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Avatar from "@mui/material/Avatar";
+import { getUserName, isLoggedIn } from "../../services/axiosClient";
 
 const Header = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   const isMobile = useMediaQuery("max-width:600px");
 
   return (
@@ -160,23 +162,54 @@ const Header = () => {
                 },
               }}
             >
+              {isLoggedIn() ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    p: 1,
+                  }}
+                >
+                  <Avatar
+                    alt={getUserName()}
+                    src="/path/to/student/avatar.jpg"
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      color: "white",
+                      backgroundColor: "#3cacae",
+                      textTransform: "capitalize",
+                      boxShadow: 2, // Slight shadow for depth
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      color: "#3cacae",
+                      fontSize: "1rem", // Text size
+                      fontWeight: 600, // Make the username text bold
+                      textTransform: "capitalize", // Capitalize the username
+                    }}
+                  >
+                    {getUserName()}
+                  </Box>
+                </Box>
+              ) : (
+                <></>
+              )}
+
               <IconButton>
                 <NotificationsIcon sx={{ color: "#3cacae" }} />
               </IconButton>
-              <Avatar
-                alt="Student Avatar"
-                src="/path/to/student/avatar.jpg"
-                sx={{
-                  marginLeft: "10px",
-                  width: 32,
-                  height: 32,
-                  color: "white",
-                  backgroundColor: "#3cacae",
-                }}
-              />
+
               <Button
                 onClick={() => {
-                  // Login logic
+                  if (isLoggedIn()) {
+                    localStorage.clear();
+                    navigate("/login");
+                  } else {
+                    navigate("/login");
+                  }
                 }}
                 className="button"
                 style={{
@@ -187,7 +220,7 @@ const Header = () => {
                   fontWeight: 500,
                 }}
               >
-                Login
+                {isLoggedIn() ? <>Logout</> : <>Login</>}
               </Button>
             </Grid>
           </Grid>
