@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Container, Typography, Tabs, Tab, Grid } from "@mui/material";
+import { Box, Container, Typography, Tabs, Tab, Grid, } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CourseCard from "../../components/card/CourseCard";
+import { useNavigate } from "react-router-dom";
+import CourseDetails from "./CourseDetails";
 // Sample course data
 const courses = [
   {
@@ -60,6 +62,16 @@ const StyledTab = styled(Tab)({
 });
 
 export default function Courses() {
+  const navigate = useNavigate();
+
+   const [open, setOpen] = useState(false);
+   const handleCardClick = () => {
+    navigate("/CourseDetails");
+  };
+  
+    // Handle opening and closing the modal
+    
+  
   const [currentTab, setCurrentTab] = useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -110,9 +122,10 @@ export default function Courses() {
           </Box>
         </Box>
 
-        <Grid container spacing={3}>
+        <Grid container spacing={3} >
           {courses.map((course) => (
-            <Grid item xs={12} md={6} key={course.id}>
+                
+                <Grid item xs={12} md={6} key={course.id} onClick={() => handleCardClick()} >
               <CourseCard
                 image={course.image}
                 title={course.title}
@@ -121,8 +134,10 @@ export default function Courses() {
                 originalPrice={course.originalPrice}
                 selfPaced={course.selfPaced}
               />
+             
             </Grid>
           ))}
+
         </Grid>
       </Container>
     </Box>

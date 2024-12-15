@@ -19,6 +19,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "./pages/Notification";
 import TeacherHomepage from "./pages/Teacher/TeacherHomepage";
+import CourseDetails from "./pages/courses/CourseDetails";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
             <Route path="/verify-email" element={<VerifyPage />} />
             <Route path="/notification" element={<Notification />} />
             <Route path="/teacher-homepage" element={<TeacherHomepage />} />
+            <Route path="/CourseDetails" element={<CourseDetails />} />
           </Route>
         </Routes>
         <ToastContainer />
