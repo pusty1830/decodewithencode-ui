@@ -8,6 +8,7 @@ import {
   Toolbar,
   Typography,
   useMediaQuery,
+  Dialog, DialogActions, DialogContent, DialogTitle
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
@@ -17,8 +18,16 @@ import { IconButton } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Avatar from "@mui/material/Avatar";
 import { getUserName, isLoggedIn } from "../../services/axiosClient";
-
+import ProfileDetailsComponent from "../Profile/ProfileDetails";
+import React, { useState } from 'react';
 const Header = () => {
+  const [open, setOpen] = useState(false);
+
+  // Handle opening and closing the modal
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+
   const navigate = useNavigate();
   // const location = useLocation();
   const isMobile = useMediaQuery("max-width:600px");
@@ -182,7 +191,20 @@ const Header = () => {
                       textTransform: "capitalize",
                       boxShadow: 2, // Slight shadow for depth
                     }}
+                    onClick={handleClickOpen}
                   />
+ <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+        <DialogTitle>Profile</DialogTitle>
+        <DialogContent>
+          <ProfileDetailsComponent /> {/* This is your ProfileDetails component */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
                   <Box
                     sx={{
                       color: "#3cacae",
