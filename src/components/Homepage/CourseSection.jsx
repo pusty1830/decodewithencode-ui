@@ -1,9 +1,19 @@
 "use client";
 
-import { Box, Container, Grid, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Button,
+  Divider,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import CourseCard from "../card/CourseCard";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getAllDataUsingSearch } from "../../services/services";
 
 const ViewAllButton = styled(Button)(({ theme }) => ({
   color: "#3cacae",
@@ -12,44 +22,85 @@ const ViewAllButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const courses = [
-  {
-    id: 1,
-    title: "Decode C++ with DSA Course",
-    description:
-      "Gain expertise in C++ syntax & DSA principles for robust coding skills. Enroll now!",
-    image: "images/studentlearning.jpeg",
-    price: "3,500",
-    originalPrice: "4,999",
-    selfPaced: true,
-  },
-  {
-    id: 2,
-    title: "Decode C++ with DSA Course",
-    description:
-      "Gain expertise in C++ syntax & DSA principles for robust coding skills. Enroll now!",
-    image: "images/studentlearning.jpeg",
-    price: "3,500",
-    originalPrice: "4,999",
-    selfPaced: true,
-  },
-  {
-    id: 3,
-    title: "Decode C++ with DSA Course",
-    description:
-      "Gain expertise in C++ syntax & DSA principles for robust coding skills. Enroll now!",
-    image: "images/studentlearning.jpeg",
-    price: "3,500",
-    originalPrice: "4,999",
-    selfPaced: true,
-  },
-  // Add more courses as needed
-];
-
 export default function CoursesSection() {
+  const navigate = useNavigate();
+  const [courses, setCourses] = useState([]); // State to hold all courses
+  const handleCardClick = () => {
+    navigate("/CourseDetails");
+  };
+
+  useEffect(() => {
+    const payLoad = {
+      data: { filter: "" },
+      page: 0,
+      pageSize: 8,
+      order: [["createdAt", "ASC"]],
+    };
+
+    // Fetch courses from the backend
+    getAllDataUsingSearch(payLoad).then((res) => {
+      console.log("Fetched Courses:", res);
+      setCourses(res?.data?.data?.rows || []);
+    });
+  }, []);
+
+  // Helper function to filter courses by category
+  const filterByCategory = (category) => {
+    return courses.filter((course) => course.category === category);
+  };
+
+  // Helper function to render a course section
+  const renderCourseSection = (title, filteredCourses) => (
+    <>
+      {/* Section Title */}
+      <Box
+        sx={{
+          mb: 4,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h5" component="h2" sx={{ color: "#ff6b6b" }}>
+          {title}
+        </Typography>
+        <ViewAllButton
+          onClick={() => navigate(`/courses?category=${title.toLowerCase()}`)}
+          endIcon={<ArrowForwardIcon />}
+        >
+          View All
+        </ViewAllButton>
+      </Box>
+
+      {/* Course Grid */}
+      <Grid container spacing={3}>
+        {filteredCourses.map((course) => (
+          <Grid
+            item
+            key={course.id}
+            xs={12}
+            md={6}
+            lg={4}
+            onClick={() => handleCardClick()}
+          >
+            <CourseCard
+              image={course.cousePreviewImg || "images/default-image.jpeg"}
+              title={course.title}
+              description={course.description}
+              price={course.price}
+              originalPrice={course.originalPrice}
+              selfPaced={course.isCourse} // Adjust as per your course logic
+            />
+          </Grid>
+        ))}
+      </Grid>
+    </>
+  );
+
   return (
     <Box sx={{ backgroundColor: "white", py: 6 }}>
       <Container maxWidth="lg">
+        {/* Main Title */}
         <Box
           sx={{
             mb: 4,
@@ -67,76 +118,18 @@ export default function CoursesSection() {
           </Typography>
         </Box>
 
-        <Box
-          sx={{
-            mb: 4,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h5" component="h2" sx={{ color: "#ff6b6b" }}>
-            All Courses
-          </Typography>
-          <ViewAllButton endIcon={<ArrowForwardIcon />}>View All</ViewAllButton>
-        </Box>
+        {/* Programming Section */}
+        {renderCourseSection("Programming", filterByCategory("Programming"))}
 
-        <Grid container spacing={3}>
-          {courses.map((course) => (
-            <Grid item key={course.id} xs={12} md={6} lg={4}>
-              {/* <StyledCard>
-                <StatusChip
-                  label={
-                    course.status === "bestseller" ? "Bestseller" : "Popular"
-                  }
-                  className={course.status}
-                />
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={course.image}
-                  alt={course.title}
-                />
-                <PremiumBadge>Premium Offerings Available</PremiumBadge>
-                <CardContent
-                  sx={{
-                    flexGrow: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                  }}
-                >
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    sx={{ fontWeight: "bold", color: "#1a1a1a" }}
-                  >
-                    {course.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {course.description}
-                  </Typography>
-                  <Box sx={{ mt: "auto", pt: 2 }}>
-                    <Typography
-                      variant="subtitle1"
-                      sx={{ color: "#1a1a1a", fontWeight: 500 }}
-                    >
-                      {course.enrollmentStatus}
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </StyledCard> */}
-              <CourseCard
-                image={course.image}
-                title={course.title}
-                description={course.description}
-                price={course.price}
-                originalPrice={course.originalPrice}
-                selfPaced={course.selfPaced}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        <Divider sx={{ my: 6 }} />
+
+        {/* Data Analyst Section */}
+        {renderCourseSection("Data Analyst", filterByCategory("Data Analyst"))}
+
+        <Divider sx={{ my: 6 }} />
+
+        {/* Other Section */}
+        {renderCourseSection("Other", filterByCategory("Other"))}
       </Container>
     </Box>
   );

@@ -10,6 +10,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 const values = ["<PRACTCAL|>", "<INNOVATIVE|>", "<EFFECTIVE|>", "<ENGAGING|>"];
 const stats = [
   { value: "55%", label: "Average Salary Hike" },
@@ -23,6 +24,7 @@ export default function HeroSection() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setTimeout(() => {
@@ -77,6 +79,7 @@ export default function HeroSection() {
                 courses & high-technology, available at the lowest cost.
               </Typography>
               <Button
+                onClick={() => navigate("/courses")}
                 variant="contained"
                 size="large"
                 sx={{

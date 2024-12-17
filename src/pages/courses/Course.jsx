@@ -6,7 +6,7 @@ import { styled } from "@mui/material/styles";
 import CourseCard from "../../components/card/CourseCard";
 import { useNavigate } from "react-router-dom";
 import CourseDetails from "./CourseDetails";
-import { getCourse } from "../../services/services";
+import { getAllDataUsingSearch, getCourse } from "../../services/services";
 // Sample course data
 // const courses = [
 //   {
@@ -81,12 +81,27 @@ export default function Courses() {
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    getCourse({
-      fieldName: "isCourse",
-      fieldValue: true,
-    })
+    // getCourse({
+    //   fieldName: "isCourse",
+    //   fieldValue: true,
+    // })
+    //   .then((res) => {
+    //     setCourses(res?.data?.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    const payLoad = {
+      data: { filter: "" },
+      page: 0,
+      pageSize: 20,
+      order: [["createdAt", "ASC"]],
+    };
+
+    getAllDataUsingSearch(payLoad)
       .then((res) => {
-        setCourses(res?.data?.data);
+        setCourses(res?.data?.data?.rows);
       })
       .catch((err) => {
         console.log(err);
@@ -144,7 +159,8 @@ export default function Courses() {
             <Grid
               item
               xs={12}
-              md={6}
+              sm={6}
+              md={4}
               key={course.id}
               onClick={() => handleCardClick()}
             >

@@ -34,3 +34,7 @@ export function uploadVideo(payLoad) {
 export function updateProfile(payLoad) {
   return client.patch("/auth/update-profile", payLoad);
 }
+
+export function getAllDataUsingSearch(payLoad) {
+  return client.post("/course/search-record", payLoad);
+}
