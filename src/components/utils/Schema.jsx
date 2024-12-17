@@ -41,12 +41,35 @@ const addCourseSchema = Yup.object({
   price: Yup.number()
     .required("Price is required")
     .min(0, "Price cannot be negative"),
-  previewVideo: Yup.mixed().required("Preview video is required"),
-  video: Yup.mixed().required("Course video is required"),
+  // previewVideo: Yup.mixed().required("Preview video is required"),
+  // video: Yup.mixed().required("Course video is required"),
   customCategory: Yup.string().when("category", {
     is: "Other",
     then: Yup.string().required("Custom category is required"),
   }),
 });
 
-export { registerSchema, verifySchema, loginSchema, addCourseSchema };
+const accountDetailsSchema = Yup.object({
+  accountHolderName: Yup.string()
+    .trim()
+    .required("Account Holder Name is required")
+    .matches(/^[a-zA-Z\s]+$/, "Only letters and spaces are allowed"),
+  accountNumber: Yup.string()
+    .required("Account Number is required")
+    .matches(/^\d{9,18}$/, "Account Number must be 9-18 digits"),
+  ifscCode: Yup.string()
+    .required("IFSC Code is required")
+    .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "Enter a valid IFSC Code"),
+  bankName: Yup.string()
+    .trim()
+    .required("Bank Name is required")
+    .matches(/^[a-zA-Z\s]+$/, "Only letters and spaces are allowed"),
+});
+
+export {
+  registerSchema,
+  verifySchema,
+  loginSchema,
+  addCourseSchema,
+  accountDetailsSchema,
+};

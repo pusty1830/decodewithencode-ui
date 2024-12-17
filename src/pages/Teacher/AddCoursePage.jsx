@@ -13,7 +13,7 @@ import {
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { addCourseSchema } from "../../components/utils/Schema";
 import { getUserId } from "../../services/axiosClient";
-import { addCourse } from "../../services/services";
+import { addCourse, uploadVideo } from "../../services/services";
 import DropzoneArea from "../../components/dropzone";
 
 const theme = createTheme({
@@ -31,13 +31,32 @@ const categoryOptions = ["Programming", "Data Analyst", "AI and ML", "Other"];
 
 export default function AddCoursePage() {
   const [files, setFiles] = useState([]);
+  const [files1, setFiles1] = useState([]);
+  const [course, setCourse] = useState([]);
+  let preview_url1;
+  let course_url;
+
+  // Check if the arrays have elements before accessing
+  if (files.length > 0) {
+    preview_url1 = files[0]?.url; // Optional chaining to avoid errors
+  }
+
+  if (files1.length > 0) {
+    course_url = files1[0]?.url;
+  }
+
+  // console.log("Preview URL:", preview_url1);
+  // console.log("Course URL:", course_url);
+
+  // console.log(preview_url1);
+  // console.log(course_url);
   const initialValues = {
     title: "",
     description: "",
     category: "",
     // customCategory: "",
-    previewVideo: null,
-    video: null,
+    // previewVideo: null,
+    // video: null,
     price: "",
   };
 
@@ -51,13 +70,32 @@ export default function AddCoursePage() {
       price: values.price,
       teacher_id: getUserId(),
     };
+
     addCourse(payLoad)
       .then((res) => {
         console.log(res.data); //here in response the id is send back !
+        setCourse(res?.data);
       })
       .catch((err) => {
         console.log(err);
       });
+    // console.log(course);
+
+    const payload = {
+      course_id: course.id,
+      teacher_id: course.teacher_id,
+      preview_url: preview_url1,
+      video_url: course_url,
+    };
+
+    uploadVideo(payload)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     resetForm();
   };
 
@@ -156,7 +194,7 @@ export default function AddCoursePage() {
                 </Box>
 
                 <Box sx={{ mt: 2 }}>
-                  <Typography variant="subtitle1" color="textSecondary">
+                  {/* <Typography variant="subtitle1" color="textSecondary">
                     Course Video
                   </Typography>
                   <input
@@ -166,8 +204,13 @@ export default function AddCoursePage() {
                     onChange={(e) =>
                       setFieldValue("video", e.currentTarget.files[0])
                     }
+                  /> */}
+                  <DropzoneArea
+                    label={"Drop your Course here"}
+                    accept={"video/*"}
+                    onFilesChange={setFiles1}
                   />
-                  <ErrorMessage name="video" />
+                  {/* <ErrorMessage name="video" /> */}
                 </Box>
 
                 <Field

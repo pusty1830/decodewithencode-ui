@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { Box, Container, Typography, Tabs, Tab, Grid, } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Container, Typography, Tabs, Tab, Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CourseCard from "../../components/card/CourseCard";
 import { useNavigate } from "react-router-dom";
 import CourseDetails from "./CourseDetails";
+import { getCourse } from "../../services/services";
 // Sample course data
 const courses = [
   {
@@ -64,19 +65,24 @@ const StyledTab = styled(Tab)({
 export default function Courses() {
   const navigate = useNavigate();
 
-   const [open, setOpen] = useState(false);
-   const handleCardClick = () => {
+  const [open, setOpen] = useState(false);
+  const handleCardClick = () => {
     navigate("/CourseDetails");
   };
-  
-    // Handle opening and closing the modal
-    
-  
+
+  // Handle opening and closing the modal
+
   const [currentTab, setCurrentTab] = useState(0);
 
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
   };
+
+  useEffect(() => {
+    getCourse().then((res) => {
+      console.log(res.data);
+    });
+  }, []);
 
   return (
     <Box sx={{ bgcolor: "white", py: 6 }}>
@@ -113,19 +119,24 @@ export default function Courses() {
                 },
               }}
             >
-              <StyledTab label="JAVA" />
+              {/* <StyledTab label="JAVA" />
               <StyledTab label="Python" />
               <StyledTab label="Paid" />
-              <StyledTab label="Trending" />
-              <StyledTab label="All Filters" />
+              <StyledTab label="Trending" /> */}
+              <StyledTab label="All Courses" />
             </Tabs>
           </Box>
         </Box>
 
-        <Grid container spacing={3} >
+        <Grid container spacing={3}>
           {courses.map((course) => (
-                
-                <Grid item xs={12} md={6} key={course.id} onClick={() => handleCardClick()} >
+            <Grid
+              item
+              xs={12}
+              md={6}
+              key={course.id}
+              onClick={() => handleCardClick()}
+            >
               <CourseCard
                 image={course.image}
                 title={course.title}
@@ -134,10 +145,8 @@ export default function Courses() {
                 originalPrice={course.originalPrice}
                 selfPaced={course.selfPaced}
               />
-             
             </Grid>
           ))}
-
         </Grid>
       </Container>
     </Box>

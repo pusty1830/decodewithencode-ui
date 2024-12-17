@@ -20,6 +20,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Notification from "./pages/Notification";
 import TeacherHomepage from "./pages/Teacher/TeacherHomepage";
 import CourseDetails from "./pages/courses/CourseDetails";
+import ProfileDetails from "./pages/profile/ProfileDetails";
+import EditProfile from "./pages/profile/EditProfile";
 
 function App() {
   return (
@@ -44,6 +46,8 @@ function App() {
             <Route path="/notification" element={<Notification />} />
             <Route path="/teacher-homepage" element={<TeacherHomepage />} />
             <Route path="/CourseDetails" element={<CourseDetails />} />
+            <Route path="/profile" element={<ProfileDetails />} />
+            <Route path="/edit-profile" element={<EditProfile />} />
           </Route>
         </Routes>
         <ToastContainer />

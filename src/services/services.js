@@ -19,10 +19,18 @@ export function addCourse(payLoad) {
   return client.post("/course/create", payLoad);
 }
 
-export function getCourse() {
-  return client.get("/course/get-all-record");
+export function getCourse(payLoad) {
+  return client.post("/course/get-all-record", payLoad);
 }
 
 export function docsUpload(payLoad) {
   return client.post("/auth/upload-doc", payLoad);
+}
+
+export function uploadVideo(payLoad) {
+  return client.post("/video/create", payLoad);
+}
+
+export function updateProfile(payLoad) {
+  return client.patch("/auth/update-profile", payLoad);
 }
