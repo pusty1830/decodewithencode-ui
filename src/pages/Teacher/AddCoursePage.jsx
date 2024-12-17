@@ -33,8 +33,11 @@ export default function AddCoursePage() {
   const [files, setFiles] = useState([]);
   const [files1, setFiles1] = useState([]);
   const [course, setCourse] = useState([]);
+  const [previewImage, setPreviewImage] = useState([]);
+
   let preview_url1;
   let course_url;
+  let previewImageforCourse;
 
   // Check if the arrays have elements before accessing
   if (files.length > 0) {
@@ -43,6 +46,9 @@ export default function AddCoursePage() {
 
   if (files1.length > 0) {
     course_url = files1[0]?.url;
+  }
+  if (previewImage.length > 0) {
+    previewImageforCourse = previewImage[0].url;
   }
 
   // console.log("Preview URL:", preview_url1);
@@ -69,6 +75,7 @@ export default function AddCoursePage() {
       description: values.description,
       price: values.price,
       teacher_id: getUserId(),
+      cousePreviewImg: previewImageforCourse,
     };
 
     addCourse(payLoad)
@@ -79,7 +86,8 @@ export default function AddCoursePage() {
       .catch((err) => {
         console.log(err);
       });
-    // console.log(course);
+    console.log(course.teacher_id);
+    console.log(course.id);
 
     const payload = {
       course_id: course.id,
@@ -186,7 +194,27 @@ export default function AddCoursePage() {
                     }
                   /> */}
                   <DropzoneArea
-                    label={"Drop your preview video here"}
+                    label={"Drop your preview Course Image here"}
+                    accept={"image/*"}
+                    onFilesChange={setPreviewImage}
+                  />
+                  {/* <ErrorMessage name="previewVideo" /> */}
+                </Box>
+
+                <Box sx={{ mt: 2 }}>
+                  {/* <Typography variant="subtitle1" color="textSecondary">
+                    Preview Course Video
+                  </Typography>
+                  <input
+                    type="file"
+                    name="previewVideo"
+                    accept="video/*"
+                    onChange={(e) =>
+                      setFieldValue("previewVideo", e.currentTarget.files[0])
+                    }
+                  /> */}
+                  <DropzoneArea
+                    label={"Drop your preview Course video here"}
                     accept={"video/*"}
                     onFilesChange={setFiles}
                   />
@@ -206,7 +234,7 @@ export default function AddCoursePage() {
                     }
                   /> */}
                   <DropzoneArea
-                    label={"Drop your Course here"}
+                    label={"Drop your Course Video here"}
                     accept={"video/*"}
                     onFilesChange={setFiles1}
                   />

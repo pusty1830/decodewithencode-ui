@@ -8,48 +8,48 @@ import { useNavigate } from "react-router-dom";
 import CourseDetails from "./CourseDetails";
 import { getCourse } from "../../services/services";
 // Sample course data
-const courses = [
-  {
-    id: 1,
-    title: "Decode Programming Powerhouse: C++, Java, Python & DSA Course",
-    description:
-      "Master C++, Java, Python, and DSA. Build essential programming skills, solve complex problems, and prepare for technical interviews.",
-    image: "images/studentlearning.jpeg",
-    price: "3,500",
-    originalPrice: "4,999",
-    selfPaced: true,
-  },
-  {
-    id: 2,
-    title: "Decode C++ with DSA Course",
-    description:
-      "Gain expertise in C++ syntax & DSA principles for robust coding skills. Enroll now!",
-    image: "images/studentlearning.jpeg",
-    price: "3,500",
-    originalPrice: "4,999",
-    selfPaced: true,
-  },
-  {
-    id: 3,
-    title: "Decode C++ with DSA Course",
-    description:
-      "Gain expertise in C++ syntax & DSA principles for robust coding skills. Enroll now!",
-    image: "images/studentlearning.jpeg",
-    price: "3,500",
-    originalPrice: "4,999",
-    selfPaced: true,
-  },
-  {
-    id: 4,
-    title: "Decode C++ with DSA Course",
-    description:
-      "Gain expertise in C++ syntax & DSA principles for robust coding skills. Enroll now!",
-    image: "images/studentlearning.jpeg",
-    price: "3,500",
-    originalPrice: "4,999",
-    selfPaced: true,
-  },
-];
+// const courses = [
+//   {
+//     id: 1,
+//     title: "Decode Programming Powerhouse: C++, Java, Python & DSA Course",
+//     description:
+//       "Master C++, Java, Python, and DSA. Build essential programming skills, solve complex problems, and prepare for technical interviews.",
+//     image: "images/studentlearning.jpeg",
+//     price: "3,500",
+//     originalPrice: "4,999",
+//     selfPaced: true,
+//   },
+//   {
+//     id: 2,
+//     title: "Decode C++ with DSA Course",
+//     description:
+//       "Gain expertise in C++ syntax & DSA principles for robust coding skills. Enroll now!",
+//     image: "images/studentlearning.jpeg",
+//     price: "3,500",
+//     originalPrice: "4,999",
+//     selfPaced: true,
+//   },
+//   {
+//     id: 3,
+//     title: "Decode C++ with DSA Course",
+//     description:
+//       "Gain expertise in C++ syntax & DSA principles for robust coding skills. Enroll now!",
+//     image: "images/studentlearning.jpeg",
+//     price: "3,500",
+//     originalPrice: "4,999",
+//     selfPaced: true,
+//   },
+//   {
+//     id: 4,
+//     title: "Decode C++ with DSA Course",
+//     description:
+//       "Gain expertise in C++ syntax & DSA principles for robust coding skills. Enroll now!",
+//     image: "images/studentlearning.jpeg",
+//     price: "3,500",
+//     originalPrice: "4,999",
+//     selfPaced: true,
+//   },
+// ];
 
 // Custom styled components
 const StyledTab = styled(Tab)({
@@ -78,11 +78,22 @@ export default function Courses() {
     setCurrentTab(newValue);
   };
 
+  const [courses, setCourses] = useState([]);
+
   useEffect(() => {
-    getCourse().then((res) => {
-      console.log(res.data);
-    });
+    getCourse({
+      fieldName: "isCourse",
+      fieldValue: true,
+    })
+      .then((res) => {
+        setCourses(res?.data?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
+
+  console.log(courses.cousePreviewImg);
 
   return (
     <Box sx={{ bgcolor: "white", py: 6 }}>
@@ -138,11 +149,11 @@ export default function Courses() {
               onClick={() => handleCardClick()}
             >
               <CourseCard
-                image={course.image}
+                image={course.cousePreviewImg}
                 title={course.title}
                 description={course.description}
                 price={course.price}
-                originalPrice={course.originalPrice}
+                // originalPrice={course.originalPrice}
                 selfPaced={course.selfPaced}
               />
             </Grid>
